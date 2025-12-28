@@ -4,24 +4,39 @@ import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { ProductSchema } from "./validations";
 
-export async function createProduct(formData: FormData) {
-  await connectDB();
+export async function createProduct(prevState: any, formData: FormData) {
+  try {
+    await connectDB();
+    
+    // Now formData will be the actual FormData object
+    const rawData = Object.fromEntries(formData.entries());
+    const validatedFields = ProductSchema.safeParse(rawData);
 
-  // Extract data from form
-  const rawFormData = {
-    name: formData.get("name"),
-    description: formData.get("description"),
-    price: Number(formData.get("price")),
-    category: formData.get("category"),
-    stock: Number(formData.get("stock")),
-    imageUrl: formData.get("imageUrl"),
-  };
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Missing Fields. Failed to Create Product.",
+      };
+    }
 
-  // Save to MongoDB
-  await Product.create(rawFormData);
+    await Product.create(validatedFields.data);
+    revalidatePath("/dashboard/products");
+    
+    return { message: "Success!", errors: {} };
+  } catch (err) {
+    return { message: "Database Error", errors: {} };
+  }
+}
 
-  // Refresh the product list page and redirect
-  revalidatePath("/dashboard/products");
-  redirect("/dashboard/products");
+export async function deleteProduct(productId: string) {
+  "use server";
+  try {
+    await connectDB();
+    await Product.findByIdAndDelete(productId);
+    revalidatePath("/dashboard/products");
+  } catch (error) {
+    console.error("Delete failed:", error);
+  }
 }
