@@ -10,7 +10,6 @@ export async function createProduct(prevState: any, formData: FormData) {
   try {
     await connectDB();
     
-    // Now formData will be the actual FormData object
     const rawData = Object.fromEntries(formData.entries());
     const validatedFields = ProductSchema.safeParse(rawData);
 
