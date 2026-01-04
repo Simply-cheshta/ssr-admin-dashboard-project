@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/components/ui/Providers"; // We'll create this below
+import { Providers } from "@/components/ui/Providers"; 
 import { seedAdmin } from "@/lib/seedAdmin";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  // --- ONE TIME SEED ---
-  // This ensures the dummy admin (admin@test.com) is created in MongoDB
   try {
     await seedAdmin();
   } catch (error) {
@@ -35,11 +33,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* We wrap children in Providers so Auth works everywhere */}
+      <body className="antialiased">
         <Providers>
           {children}
         </Providers>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
