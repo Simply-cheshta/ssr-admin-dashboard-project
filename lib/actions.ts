@@ -13,20 +13,25 @@ import { authOptions } from "@/lib/auth"
 export async function createProduct(prevState: any, formData: FormData) {
   try {
     await connectDB();
-    
     const rawData = Object.fromEntries(formData.entries());
+    
+    // what did the server actually received
+    console.log("FORM DATA RECEIVED:", rawData);
+
     const validatedFields = ProductSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
+      // 2. error logging
+      console.error("ZOD ERRORS:", validatedFields.error.flatten().fieldErrors);
+      
       return {
         errors: validatedFields.error.flatten().fieldErrors,
-        message: "Missing Fields. Failed to Create Product.",
+        message: "Missing Fields. Check terminal for details.",
       };
     }
 
     await Product.create(validatedFields.data);
     revalidatePath("/dashboard/products");
-    
     return { message: "Success!", errors: {} };
   } catch (err) {
     return { message: "Database Error", errors: {} };
