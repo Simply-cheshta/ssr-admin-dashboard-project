@@ -2,7 +2,6 @@ import { connectDB } from "./mongodb";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
-// Make sure 'export' is here!
 export async function seedAdmin() {
   await connectDB();
   

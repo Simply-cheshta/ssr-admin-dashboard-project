@@ -15,13 +15,12 @@ export async function createProduct(prevState: any, formData: FormData) {
     await connectDB();
     const rawData = Object.fromEntries(formData.entries());
     
-    // what did the server actually received
     console.log("FORM DATA RECEIVED:", rawData);
 
     const validatedFields = ProductSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
-      // 2. error logging
+
       console.error("ZOD ERRORS:", validatedFields.error.flatten().fieldErrors);
       
       return {
