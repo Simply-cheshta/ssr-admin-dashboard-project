@@ -16,7 +16,6 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    // The 'credentials' ID must match the provider ID in your API route
     const res = await signIn("credentials", {
       email,
       password,
@@ -27,7 +26,6 @@ export default function LoginPage() {
       setError("Invalid email or password. Hint: admin@test.com / admin123");
       setLoading(false);
     } else {
-      // Successful login - send to dashboard
       router.push("/dashboard");
       router.refresh();
     }
@@ -53,7 +51,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
-              placeholder="admin@test.com"
+              placeholder="Enter your email"
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -65,7 +63,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
-              placeholder="••••••••"
+              placeholder="Enter your password"
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

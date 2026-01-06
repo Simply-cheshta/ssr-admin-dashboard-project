@@ -1,18 +1,17 @@
 import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
 import { StatsCards } from "@/components/ui/StatsCards";
-import InventoryChart from "@/components/ui/InventoryChart"; // Ensure default import
+import InventoryChart from "@/components/ui/InventoryChart"; 
+import SalesChart from "@/components/ui/SalesChart"; 
 
 export default async function DashboardPage() {
   await connectDB();
 
-  // Fetch data
-  const totalProducts = await Product.countDocuments();
-  const products = await Product.find().lean(); // .lean() converts Mongoose docs to plain JS objects
+  const products = await Product.find().lean();
+  const totalProducts = products.length;
   const totalValue = products.reduce((acc, item: any) => acc + (item.price * item.stock), 0);
   const outOfStock = products.filter((p: any) => p.stock === 0).length;
 
-  // Format data for the chart (Show top 8 products)
   const chartData = products.slice(0, 8).map((p: any) => ({
     name: p.name.length > 10 ? p.name.substring(0, 10) + "..." : p.name,
     stock: p.stock,
@@ -33,14 +32,9 @@ export default async function DashboardPage() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Chart Section - Takes 2/3 of the width on desktop */}
-          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-800 mb-2">Stock Levels</h3>
-            <p className="text-sm text-slate-500 mb-6">Current inventory count per product.</p>
-            <InventoryChart data={chartData} />
+          <div className="lg:col-span-2">
+            <SalesChart />
           </div>
-
-          {/* Side Info Section - Takes 1/3 of the width */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <h3 className="text-lg font-bold text-slate-800 mb-4">Inventory Health</h3>
             <div className="space-y-4">
@@ -58,6 +52,12 @@ export default async function DashboardPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <h3 className="text-lg font-bold text-slate-800 mb-2">Stock Levels</h3>
+          <p className="text-sm text-slate-500 mb-6">Current inventory count per product.</p>
+          <InventoryChart data={chartData} />
         </div>
       </div>
     </div>
