@@ -83,10 +83,56 @@ Create a `.env` file in the project root and add:
 ```env
 MONGODB_URI=your_mongodb_connection_string
 NEXTAUTH_SECRET=your_nextauth_secret
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=https://ssr-admin-dashboard-project-git-main-simply-cheshtas-projects.vercel.app
+
 
 CLOUDINARY_CLOUD_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_cloudinary_key
 CLOUDINARY_API_SECRET=your_cloudinary_secret
+
+
+---
+
+## Live Deployment
+
+The application is officially live and running in a production environment.
+
+- **Production URL:**  
+  https://ssr-admin-dashboard-project-git-main-simply-cheshtas-projects.vercel.app/
+
+- **Platform:** Vercel (Production)
+- **Database:** MongoDB Atlas (Cloud)
+
+---
+
+## Demo Video
+
+ https://drive.google.com/file/d/1ryNAVKnWboS0QPDezB1wOaYp86QEXVuE/view?usp=sharing
+
+---
+
+## Access & Login Credentials
+
+To explore the administrative features, use the following **demo admin account**.
+ 
+> Access is restricted to users with the `admin` role assigned in the database.
+
+| Field | Value |
+| --- | --- |
+| **Login URL** | `/login` |
+| **Email Address** | `admin@test.com` |
+| **Password** | `admin123` |
+
+
+> All sub-routes under `/dashboard` are protected by **NextAuth.js middleware**.  
+> Unauthorized access attempts are automatically redirected to the login page.
+
+---
+
+
+---
+
+
+
 
 
